@@ -4,10 +4,11 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import NotFound from './pages/NotFound';
-
+import Header from './components/Header';
 const App = () => {
   return (
    <BrowserRouter>
+    <Header/>
     <Switch>
           <Route path="/" exact component={Home} />
           <Route path="/login" exact component={Login} />
