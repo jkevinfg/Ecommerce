@@ -18,17 +18,17 @@ const Header = () => {
   return(
     <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
       <Menu.Item key="home" icon={<HomeOutlined />} className="me-auto">
-       <Link to="/"> Home</Link>
+       <Link to="/"> Inicio</Link>
       </Menu.Item>
       <Menu.Item key="login" icon={<LoginOutlined />}>
-        <Link to="/login"> Login</Link>
+        <Link to="/login"> Iniciar Sesión</Link>
       </Menu.Item>
       <Menu.Item key="register" icon={<UserAddOutlined />}>
-        <Link to="/register"> Register</Link>
+        <Link to="/register"> Registro</Link>
       </Menu.Item>
       <SubMenu key="SubMenu" icon={<SettingOutlined />} title="Username">
           <Menu.Item key="opcion1">opcion1</Menu.Item>
-          <Menu.Item key="logout">Logout</Menu.Item>
+          <Menu.Item key="logout">Cerrar Sesión</Menu.Item>
       </SubMenu>
 
     </Menu>

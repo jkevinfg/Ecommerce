@@ -12,7 +12,7 @@ const [email,setEmail] = useState('');
 const handleSubmit = async (event) => {
   event.preventDefault();
   const actionCodeSettings = {
-    url : 'http://localhost:3000/register/complete',
+    url: process.env.REACT_APP_REGISTER_URL,
     handleCodeInApp : true
   }
   await sendSignInLinkToEmail(auth, email, actionCodeSettings)
