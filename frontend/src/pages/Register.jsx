@@ -15,11 +15,14 @@ const handleSubmit = async (event) => {
     url: process.env.REACT_APP_REGISTER_URL,
     handleCodeInApp : true
   }
-  await sendSignInLinkToEmail(auth, email, actionCodeSettings)
-  toast.success('Revise su bandeja de entrada , hemos enviado un link para que continue con el registro');
-  window.localStorage.setItem('emailRegistration',email);
-  setEmail('');
-
+  try {
+    await sendSignInLinkToEmail(auth, email, actionCodeSettings)
+    toast.success('Revise su bandeja de entrada , hemos enviado un link para que continue con el registro');
+    window.localStorage.setItem('emailRegistration', email);
+    setEmail('');
+  } catch (error) {
+    toast.error(error);
+  }
 }
 
 const handleChange=(event) => {
