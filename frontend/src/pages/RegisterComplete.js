@@ -15,6 +15,16 @@ const RegisterComplete = ({history}) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if(!email || !password){
+      toast.error('El correo y contraseña son requeridos');
+      return;
+    }
+    if(password.length < 6){
+      toast.error('La contraseña no puede ser menor a 6 caracteres');
+      return;
+    }
+
     try {
       const result = await signInWithEmailLink(auth, email, window.location.href);
       console.log("result : ", result.user);
@@ -26,6 +36,8 @@ const RegisterComplete = ({history}) => {
           await updatePassword(user,password);
           const idTokenResult = await user.getIdTokenResult();
           console.log("user",user,"idTokenResult",idTokenResult);
+          //react redux
+          history.push('/');
       }
     } catch (error ) {
       toast.error(error.message);
