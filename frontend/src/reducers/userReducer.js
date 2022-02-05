@@ -1,4 +1,4 @@
-const userReducer = (state = {nombre : 'kevin'} , action) => {
+const userReducer = (state = null , action) => {
     switch(action.type){
         case "LOGGED_IN_USER":
             return action.payload;
@@ -9,5 +9,5 @@ const userReducer = (state = {nombre : 'kevin'} , action) => {
     }
 }
 
-export default userReducer;
 
+export default userReducer;

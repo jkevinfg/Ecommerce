@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {BrowserRouter , Route ,Switch}from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -7,7 +7,34 @@ import NotFound from './pages/NotFound';
 import Header from './components/Header';
 import RegisterComplete from './pages/RegisterComplete';
 
+import {auth} from './firebase';
+import  {useDispatch} from 'react-redux';
+
+
 const App = () => {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(async (user) => {
+      if(user){
+        const idTokenResult = await user.getIdTokenResult();
+        console.log("user",user);
+        dispatch({
+          type : 'LOGGED_IN_USER',
+          payload : {
+            email : user.email,
+            token : idTokenResult.token,
+          }
+        });
+      }
+    });
+    //cleanup
+    return () => unsubscribe();
+
+  },[])
+
+
   return (
    <BrowserRouter>
     <Header/>

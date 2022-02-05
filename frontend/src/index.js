@@ -8,7 +8,7 @@ import 'antd/dist/antd.css'; // or 'antd/dist/antd.less'
 import {createStore} from 'redux';
 import {Provider} from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import reducer from './reducers';
+import reducer  from './reducers/index';
 const store = createStore(reducer , composeWithDevTools());
 
 ReactDOM.render(
