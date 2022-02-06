@@ -36,7 +36,7 @@ return (
                   <h4>Registro</h4>
                   <ToastContainer/>
                   <form onSubmit={handleSubmit}>
-                      <input type="email" className="form-control" onChange={handleChange}/>
+                      <input type="email" placeholder='Tu correo' className="form-control" onChange={handleChange}/>
                       <button type="submit" className="btn btn-success mt-2">Enviar</button>
                   </form>
             </div>
