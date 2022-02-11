@@ -1,17 +1,42 @@
 import React,{useState} from 'react';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../firebase';
 import {Button} from 'antd';
 import {MailOutlined} from '@ant-design/icons';
+import { useDispatch } from 'react-redux';
 
-const Login = () => {
+
+const Login = ({history}) => {
 
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
+  const [loading , setLoading ] = useState(false);
+
+
+  let dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log(email,password);
+    setLoading(true);
+    try {
+      const result = await signInWithEmailAndPassword(auth,email,password);
+      const {user } = result;
+      const idTokenResult = await user.getIdTokenResult()
+      
+      dispatch({
+        type : 'LOGGED_IN_USER',
+        payload : {
+          email : user.email,
+          token : idTokenResult.token,
+        }
+      });
+      history.push('/');
+    }catch (error){
+      toast.error(error.message);
+      setLoading(false);
+    } 
   }
 
   const handleChangeEmail=(event) => {
