@@ -8,7 +8,7 @@ import {Link } from 'react-router-dom';
 import { auth } from '../firebase';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
-
+import { logoutUser} from '../actions/index'
 
 const { SubMenu } = Menu;
 
@@ -24,10 +24,7 @@ const Header = () => {
 
   const logout = () => {
     auth.signOut();
-    dispatch({ 
-      type : 'LOGOUT',
-      payload : null
-    });
+    dispatch(logoutUser());
     history.push('/login');
   }
 

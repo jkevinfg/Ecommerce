@@ -6,7 +6,7 @@ import { auth } from '../firebase';
 import {Button} from 'antd';
 import {MailOutlined} from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
-
+import { loginUser } from '../actions';
 
 const Login = ({history}) => {
 
@@ -22,16 +22,9 @@ const Login = ({history}) => {
     setLoading(true);
     try {
       const result = await signInWithEmailAndPassword(auth,email,password);
-      const {user } = result;
+      const {user} = result;
       const idTokenResult = await user.getIdTokenResult()
-      
-      dispatch({
-        type : 'LOGGED_IN_USER',
-        payload : {
-          email : user.email,
-          token : idTokenResult.token,
-        }
-      });
+      dispatch(loginUser(user,idTokenResult));
       history.push('/');
     }catch (error){
       toast.error(error.message);
