@@ -1,10 +1,10 @@
 import React,{useState} from 'react';
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword , GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 import { auth } from '../firebase';
 import {Button} from 'antd';
-import {MailOutlined} from '@ant-design/icons';
+import {MailOutlined, GoogleOutlined} from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../actions';
 
@@ -23,7 +23,7 @@ const Login = ({history}) => {
     try {
       const result = await signInWithEmailAndPassword(auth,email,password);
       const {user} = result;
-      const idTokenResult = await user.getIdTokenResult()
+      const idTokenResult = await user.getIdTokenResult();
       dispatch(loginUser(user,idTokenResult));
       history.push('/');
     }catch (error){
@@ -39,11 +39,29 @@ const Login = ({history}) => {
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
   }
+
+
+  const googleLogin = async () => {
+    //Using a popup. 
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const {user} = result;
+      const idTokenResult = await user.getIdTokenResult();
+      dispatch(loginUser(user,idTokenResult));
+      history.push("/");
+
+
+    } catch (error){
+      console.log(error)
+      toast.error(error.message);
+    } 
+  }
   return (
     <div className="container p-3">
         <div className="row">
               <div className="col-md-6 offset-md-3">
-                    <h4>Inicia Sesión</h4>
+                   {loading ?  <h4 className='text-danger'>Loading...</h4> : <h4> Iniciar Sesión</h4>  }
                     <ToastContainer/>
                     <form onSubmit={handleSubmit}>
                         <input type="email" placeholder='Tu correo' className="form-control mb-2" onChange={handleChangeEmail}/>
@@ -51,7 +69,7 @@ const Login = ({history}) => {
                         <Button
                           onClick={handleSubmit}
                           type = "primary"
-                          className='mb-3'
+                          className='mb-2'
                           block
                           shape='round'
                           icon = {<MailOutlined/>}
@@ -59,6 +77,17 @@ const Login = ({history}) => {
                           disabled= {!email || password.length < 6}
                         > 
                         Entrar
+                        </Button>
+                        <Button
+                          onClick={googleLogin}
+                          type = "danger"
+                          className='mb-2'
+                          block
+                          shape='round'
+                          icon = {<GoogleOutlined />}
+                          size="large"
+                        > 
+                        Inicia sesión con Google
                         </Button>
                     </form>
               </div>

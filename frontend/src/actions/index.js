@@ -1,9 +1,9 @@
-export const loginUser = (user,idTokenResult) => {
+export const loginUser = (user,idToken) => {
     return {
         type : 'LOGGED_IN_USER',
         payload : {
           email : user.email,
-          token : idTokenResult.token,
+          token : idToken.token,
         }
     }
 }
