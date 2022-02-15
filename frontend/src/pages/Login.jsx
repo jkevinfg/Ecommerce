@@ -7,6 +7,7 @@ import {Button} from 'antd';
 import {MailOutlined, GoogleOutlined} from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../actions';
+import {Link} from 'react-router-dom';
 
 const Login = ({history}) => {
 
@@ -27,8 +28,9 @@ const Login = ({history}) => {
       dispatch(loginUser(user,idTokenResult));
       history.push('/');
     }catch (error){
-      toast.error(error.message);
+      //toast.error(error.message);
       setLoading(false);
+      toast.error('Correo o contraseña incorrectas')
     } 
   }
 
@@ -55,6 +57,7 @@ const Login = ({history}) => {
     } catch (error){
       console.log(error)
       toast.error(error.message);
+      
     } 
   }
   return (
@@ -89,6 +92,11 @@ const Login = ({history}) => {
                         > 
                         Inicia sesión con Google
                         </Button>
+
+                        <Link to="/forgot/password"
+                        className='float-end text-danger'
+                        
+                        >Olvidaste tu contraseña</Link>
                     </form>
               </div>
           </div>

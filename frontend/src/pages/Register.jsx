@@ -17,6 +17,7 @@ const handleSubmit = async (event) => {
   }
   try {
     await sendSignInLinkToEmail(auth, email, actionCodeSettings)
+    
     toast.success('Revise su bandeja de entrada , hemos enviado un link para que continue con el registro');
     window.localStorage.setItem('emailRegistration', email);
     setEmail('');
