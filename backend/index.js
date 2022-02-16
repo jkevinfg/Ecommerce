@@ -30,7 +30,6 @@ app.use(cors());
 // routes
 authApi(app);
 userApi(app);
-console.log(fs.readdirSync('./src/routes'))
 
 //port
 app.listen(config.port , () => {
