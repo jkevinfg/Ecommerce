@@ -12,12 +12,10 @@ const userApi = require('./src/routes/user')
 const app = express();
 
 //db
-/*mongoose.connect(config.database , {
+mongoose.connect(config.database , {
     useNewUrlParser:true,
-    useCreateIndex: true,
-    useFindAndModify : true
 }).then(() => console.log('DB connection'))
-.catch(err => console.log('DB connection err',err));*/
+.catch(err => console.log('DB connection err',err));
 
 //middlewares
 app.use(morgan("dev"));
@@ -25,7 +23,6 @@ app.use(bodyParser.json({
     limit : '2mb'
 }));
 app.use(cors());
-
 
 // routes
 authApi(app);

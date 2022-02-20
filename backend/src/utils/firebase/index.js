@@ -1,5 +1,5 @@
 const admin = require("firebase-admin");
-const { config } = require('./src/config/index');
+const { config } = require('../../config/index');
 
 const serviceAccount = {
     type: config.firebaseType,
@@ -13,8 +13,6 @@ const serviceAccount = {
     auth_provider_x509_cert_url: config.firebaseAuthProvider,
     client_x509_cert_url: config.firebaseClientUrl
 };
-
-
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
