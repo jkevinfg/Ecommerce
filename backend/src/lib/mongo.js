@@ -1,33 +1,17 @@
-const {Connection , Mongoose } = require('mongoose');
-const { config } = require('../config');
+const mongoose = require('mongoose');
+const { config } = require('../config/index');
+const MONGO_URI = config.database
 
-const MONGO_URI = config.database;
-
-class MongoLib {
-    constructor() {
-        this.client = new Connection(MONGO_URI, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-         });
-       // this.dbName = DB_NAME;
+class MongoLib{
+    constructor(){
+        this.client =  mongoose.connect(MONGO_URI, {
+            useNewUrlParser:true,
+        })
     }
-
     connection() {
-        if (!MongoLib.connect) {
-            MongoLib.connect = new Promise((resolve, reject) => {
-                this.client.connection(err => {
-                    if (err) {
-                        reject(err);
-                    }
-                    console.log('Connected succesfully to mongo');
-                });
-            });
-        }
-
-        return MongoLib.connect;
+       this.client.then(() => console.log('DB connection'))
+        .catch(err => console.log('DB connection err',err));
     }
-
 }
 
 module.exports = MongoLib;
-

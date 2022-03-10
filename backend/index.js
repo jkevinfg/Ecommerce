@@ -1,9 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const fs = require('fs');
 const { config } = require('./src/config/index');
 
 const authApi = require('./src/routes/auth');
@@ -12,10 +10,9 @@ const userApi = require('./src/routes/user')
 const app = express();
 
 //db
-mongoose.connect(config.database , {
-    useNewUrlParser:true,
-}).then(() => console.log('DB connection'))
-.catch(err => console.log('DB connection err',err));
+const MongoLib = require('./src/lib/mongo')
+const mongo = new MongoLib()
+mongo.connection()
 
 //middlewares
 app.use(morgan("dev"));

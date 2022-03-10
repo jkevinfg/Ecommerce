@@ -6,10 +6,10 @@ const {authCheck} = require('../utils/middleware/auth');
 
 function authApi(app) {
     const router = express.Router();
-    app.use('/api/auth', router);
+    app.use('/auth', router);
   
     //POST
-    router.post('/create-or-update-user',authCheck, async (req,res) => {
+    router.post('/create-or-update',authCheck, async (req,res) => {
         const {email,aud} = req.user;
         console.log(req.user)
         const user = await User.findOneAndUpdate({email}, {name:aud},{new : true});
