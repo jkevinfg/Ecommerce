@@ -31,9 +31,6 @@ const Header = () => {
     return user;
   }) ; //traendo el estado -> mapStateToProps
 
-  
-
-
   const handleClick =(event) => {
     setCurrent(event.key)
   }

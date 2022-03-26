@@ -7,6 +7,7 @@ import NotFound from './pages/NotFound';
 import Header from './components/Header';
 import RegisterComplete from './pages/RegisterComplete';
 import ForgotPassword from './pages/ForgotPassword';
+import { loginUser } from './actions/index';
 
 
 import {auth} from './firebase';
@@ -22,14 +23,7 @@ const App = () => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if(user){
         const idTokenResult = await user.getIdTokenResult();
-        console.log("user",user);
-        dispatch({
-          type : 'LOGGED_IN_USER',
-          payload : {
-            email : user.email,
-            token : idTokenResult.token,
-          }
-        });
+        dispatch(loginUser(user,idTokenResult));
       }
     });
     //cleanup

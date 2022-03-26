@@ -1,11 +1,11 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import { ToastContainer,toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { signInWithEmailAndPassword , GoogleAuthProvider, signInWithPopup} from "firebase/auth";
 import { auth } from '../firebase';
 import {Button} from 'antd';
 import {MailOutlined, GoogleOutlined} from '@ant-design/icons';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../actions';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
@@ -25,23 +25,31 @@ const Login = ({history}) => {
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
   const [loading , setLoading ] = useState(false);
+  const {user} = useSelector((state) => ({...state}));
+  
+  useEffect(() => {
+    if(user && user.token) history.push("/");
+  },[user]);
 
 
   let dispatch = useDispatch();
-
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     try {
       const result = await signInWithEmailAndPassword(auth,email,password);
       const {user} = result;
+      console.log(user);
       const idTokenResult = await user.getIdTokenResult();
-      createOrUpdateUser(idTokenResult.token).then((result)=> {
-        console.log("Create or update res", result)
-      }).catch((error) => {
-        console.log(error)
-      })
-     // dispatch(loginUser(user,idTokenResult));
+      const token = idTokenResult.token;
+      try{
+        const state =  await createOrUpdateUser(token)
+        console.log("create or update", state);
+      }catch(error){
+        console.log(error);
+      }
+      dispatch(loginUser(user,idTokenResult));
       history.push('/');
     }catch (error){
       //toast.error(error.message);
@@ -71,7 +79,6 @@ const Login = ({history}) => {
 
 
     } catch (error){
-      console.log(error)
       toast.error(error.message);
       
     } 

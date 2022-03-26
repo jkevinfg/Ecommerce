@@ -3,7 +3,7 @@ require('dotenv').config();
 const config = {
     //api
     dev: process.env.NODE_ENV !== 'production',
-    port: process.env.PORT || 3000,
+    port: process.env.PORT,
     cors: process.env.CORS,
     database : process.env.DATABASE,
     //firebase
