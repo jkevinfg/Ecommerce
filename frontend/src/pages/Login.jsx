@@ -11,13 +11,13 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 const createOrUpdateUser = async (authtoken) => {
-    return await axios.post(
-              `${process.env.REACT_APP_API}/auth/create-or-update`,
-              {},
-              { 
-               headers : {authtoken}
-              }
-    )
+  return await axios.post(
+    `${process.env.REACT_APP_API}/auth/create-or-update`,
+    {},
+    { 
+     headers : {authtoken}
+    }
+)
 }
 
 const Login = ({history}) => {
@@ -33,7 +33,7 @@ const Login = ({history}) => {
 
   let dispatch = useDispatch();
   
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event) => { 
     event.preventDefault();
     setLoading(true);
     try {
@@ -41,11 +41,13 @@ const Login = ({history}) => {
       const {user} = result;
       const idTokenResult = await user.getIdTokenResult();
       const token = idTokenResult.token;
-      console.log("Token =>",token);      
-      createOrUpdateUser(token)
-              .then((res) => console.log("Create or update =>",res))
+      createOrUpdateUser(token) 
+              .then((res) => {
+                console.log("Create or Update =>",res.data);
+                //login(user,idTokenResult)
+                dispatch(loginUser(res.data,idTokenResult));
+                })
               .catch();
-      dispatch(loginUser(user,idTokenResult));
       history.push('/');
     }catch(error){
       setLoading(false);

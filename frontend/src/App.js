@@ -8,8 +8,6 @@ import Header from './components/Header';
 import RegisterComplete from './pages/RegisterComplete';
 import ForgotPassword from './pages/ForgotPassword';
 import { loginUser } from './actions/index';
-
-
 import {auth} from './firebase';
 import  {useDispatch,useSelector} from 'react-redux';
 
@@ -18,7 +16,6 @@ const App = () => {
 
   const dispatch = useDispatch();
   const {user} = useSelector((state) => ({...state}));
-
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if(user){

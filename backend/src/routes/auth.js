@@ -11,12 +11,14 @@ function authApi(app) {
         const {email,aud} = req.user;
         const user = await User.findOneAndUpdate({email}, {name:aud},{new : true});
         if(user){
-             res.json(user);
+            console.log("User updated",user);
+            res.json(user);
         }else {
             const newUser = await new User({    
                 email,
                 name: aud, 
             }).save();
+           console.log("User created",newUser);
             res.json(newUser);
         }
     }); 
