@@ -16,6 +16,7 @@ mongo.connection()
 
 //middlewares
 app.use(morgan("dev"));
+app.use(express.json());
 app.use(bodyParser.json({
     limit : '2mb'
 }));

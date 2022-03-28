@@ -11,13 +11,13 @@ import {Link} from 'react-router-dom';
 import axios from 'axios';
 
 const createOrUpdateUser = async (authtoken) => {
-  return await axios( {
-    url : `${process.env.REACT_APP_API}/auth/create-or-update-user`,
-    headers : {
-      authtoken
-    },
-    method : 'post'
-  })
+    return await axios.post(
+              `${process.env.REACT_APP_API}/auth/create-or-update`,
+              {},
+              { 
+               headers : {authtoken}
+              }
+    )
 }
 
 const Login = ({history}) => {
@@ -31,7 +31,6 @@ const Login = ({history}) => {
     if(user && user.token) history.push("/");
   },[user]);
 
-
   let dispatch = useDispatch();
   
   const handleSubmit = async (event) => {
@@ -40,19 +39,15 @@ const Login = ({history}) => {
     try {
       const result = await signInWithEmailAndPassword(auth,email,password);
       const {user} = result;
-      console.log(user);
       const idTokenResult = await user.getIdTokenResult();
       const token = idTokenResult.token;
-      try{
-        const state =  await createOrUpdateUser(token)
-        console.log("create or update", state);
-      }catch(error){
-        console.log(error);
-      }
+      console.log("Token =>",token);      
+      createOrUpdateUser(token)
+              .then((res) => console.log("Create or update =>",res))
+              .catch();
       dispatch(loginUser(user,idTokenResult));
       history.push('/');
-    }catch (error){
-      //toast.error(error.message);
+    }catch(error){
       setLoading(false);
       toast.error('Correo o contraseña incorrectas')
     } 

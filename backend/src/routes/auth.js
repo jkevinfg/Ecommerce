@@ -1,18 +1,17 @@
 const express = require('express');
 const User = require('../utils/schemas/user');
 //middlewares
-const {authCheck} = require('../utils/middleware/auth'); 
+const authCheck = require('../utils/middleware/auth'); 
 
 function authApi(app) {
     const router = express.Router();
     app.use('/auth', router);
     //POST
-    router.post('/create-or-update-user',authCheck, async (req,res,next) => {
+    router.post('/create-or-update',authCheck, async function (req,res,next) {
         const {email,aud} = req.user;
         const user = await User.findOneAndUpdate({email}, {name:aud},{new : true});
-        console.log(user);
         if(user){
-            res.json(user);
+             res.json(user);
         }else {
             const newUser = await new User({    
                 email,
@@ -20,8 +19,7 @@ function authApi(app) {
             }).save();
             res.json(newUser);
         }
-        next();
-    });
+    }); 
   }
   
   module.exports = authApi;
