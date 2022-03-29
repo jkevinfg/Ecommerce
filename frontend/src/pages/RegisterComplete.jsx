@@ -2,16 +2,22 @@ import React, { useEffect, useState } from 'react';
 import { auth } from '../firebase';
 import { signInWithEmailLink, updatePassword } from "firebase/auth";
 import { ToastContainer, toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../actions';
+import {createOrUpdateUser} from '../functions/auth'
 import 'react-toastify/dist/ReactToastify.css';
 
 const RegisterComplete = ({history}) => {
 
   const [email, setEmail] = useState('');
   const [password , setPassword] = useState('');
+  const {user} = useSelector((state) => ({...state}));
 
   useEffect(() => {
     setEmail(window.localStorage.getItem('emailRegistration'));
   },[]);
+
+  let dispatch = useDispatch();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -34,9 +40,17 @@ const RegisterComplete = ({history}) => {
           const user = auth.currentUser;
           console.log(user);
           await updatePassword(user,password);
-          const idTokenResult = await user.getIdTokenResult();
-          console.log("user",user,"idTokenResult",idTokenResult);
+          const idTokenResult = await user.getIdTokenResult(); 
           //react redux
+          console.log("user",user,"idTokenResult",idTokenResult);
+          const token = idTokenResult.token;
+          createOrUpdateUser(token) 
+                  .then((res) => {
+                    console.log("Create or Update =>",res.data);
+                    //login(user,idTokenResult)
+                    dispatch(loginUser(res.data,idTokenResult));
+                    })
+                  .catch();
           history.push('/');
       }
     } catch (error ) {

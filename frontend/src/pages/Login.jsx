@@ -8,17 +8,8 @@ import {MailOutlined, GoogleOutlined} from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../actions';
 import {Link} from 'react-router-dom';
-import axios from 'axios';
+import {createOrUpdateUser} from '../functions/auth'
 
-const createOrUpdateUser = async (authtoken) => {
-  return await axios.post(
-    `${process.env.REACT_APP_API}/auth/create-or-update`,
-    {},
-    { 
-     headers : {authtoken}
-    }
-)
-}
 
 const Login = ({history}) => {
 
@@ -67,13 +58,18 @@ const Login = ({history}) => {
   const googleLogin = async () => {
     //Using a popup. 
     try {
+      
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const {user} = result;
       const idTokenResult = await user.getIdTokenResult();
-      dispatch(loginUser(user,idTokenResult));
+      const token = idTokenResult.token;
+      createOrUpdateUser(token) 
+      .then((res) => {
+        dispatch(loginUser(res.data,idTokenResult));
+        })
+      .catch();
       history.push("/");
-
 
     } catch (error){
       toast.error(error.message);
