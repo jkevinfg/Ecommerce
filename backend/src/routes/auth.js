@@ -21,7 +21,18 @@ function authApi(app) {
            console.log("User created",newUser);
             res.json(newUser);
         }
-    }); 
+    });
+
+    router.post('/current-user',authCheck, async function (req,res,next) {
+        User.findOne({email : req.user.email}).exec((err,user) => {
+            if(err){
+                throw new Error(err)
+            }
+            res.json(user);
+        })
+    });
+
+
   }
   
   module.exports = authApi;
