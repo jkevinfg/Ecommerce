@@ -50,7 +50,7 @@ const RegisterComplete = ({history}) => {
                     //login(user,idTokenResult)
                     dispatch(loginUser(res.data,idTokenResult));
                     })
-                  .catch();
+                    .catch(err => console.log(err));
           history.push('/');
       }
     } catch (error ) {

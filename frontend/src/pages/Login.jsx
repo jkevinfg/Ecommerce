@@ -38,7 +38,7 @@ const Login = ({history}) => {
                 //login(user,idTokenResult)
                 dispatch(loginUser(res.data,idTokenResult));
                 })
-              .catch();
+              .catch(err => console.log(err));
       history.push('/');
     }catch(error){
       setLoading(false);
@@ -68,7 +68,7 @@ const Login = ({history}) => {
       .then((res) => {
         dispatch(loginUser(res.data,idTokenResult));
         })
-      .catch();
+      .catch(err => console.log(err));
       history.push("/");
 
     } catch (error){

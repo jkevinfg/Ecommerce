@@ -10,17 +10,24 @@ import ForgotPassword from './pages/ForgotPassword';
 import { loginUser } from './actions/index';
 import {auth} from './firebase';
 import  {useDispatch,useSelector} from 'react-redux';
+import { currentUser } from './functions/auth';
 
 
 const App = () => {
-
+  
   const dispatch = useDispatch();
   const {user} = useSelector((state) => ({...state}));
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
       if(user){
         const idTokenResult = await user.getIdTokenResult();
-        dispatch(loginUser(user,idTokenResult));
+        const token = idTokenResult.token;
+        console.log("user",user);
+        currentUser(token) 
+          .then((res) => {
+            dispatch(loginUser(res.data,idTokenResult));
+            })
+          .catch(err => console.log(err));
       }
     });
     //cleanup
