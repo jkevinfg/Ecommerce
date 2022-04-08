@@ -22,7 +22,6 @@ const App = () => {
       if(user){
         const idTokenResult = await user.getIdTokenResult();
         const token = idTokenResult.token;
-        console.log("user",user);
         currentUser(token) 
           .then((res) => {
             dispatch(loginUser(res.data,idTokenResult));

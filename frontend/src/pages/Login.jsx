@@ -10,9 +10,7 @@ import { loginUser } from '../actions';
 import {Link} from 'react-router-dom';
 import {createOrUpdateUser} from '../functions/auth'
 
-
 const Login = ({history}) => {
-
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
   const [loading , setLoading ] = useState(false);
@@ -23,7 +21,15 @@ const Login = ({history}) => {
   },[user]);
 
   let dispatch = useDispatch();
-  
+
+  const roleBasedRedirect = (res) => {
+    if(res.data.role === 'admin'){
+      history.push('/admin/dashboard');
+    } else {
+      history.push('/user/history');
+    }
+  };
+
   const handleSubmit = async (event) => { 
     event.preventDefault();
     setLoading(true);
@@ -37,9 +43,10 @@ const Login = ({history}) => {
                 console.log("Create or Update =>",res.data);
                 //login(user,idTokenResult)
                 dispatch(loginUser(res.data,idTokenResult));
+                roleBasedRedirect(res);
                 })
               .catch(err => console.log(err));
-      history.push('/');
+      //history.push('/');
     }catch(error){
       setLoading(false);
       toast.error('Correo o contraseña incorrectas')
@@ -58,7 +65,6 @@ const Login = ({history}) => {
   const googleLogin = async () => {
     //Using a popup. 
     try {
-      
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const {user} = result;
@@ -67,10 +73,11 @@ const Login = ({history}) => {
       createOrUpdateUser(token) 
       .then((res) => {
         dispatch(loginUser(res.data,idTokenResult));
+        console.log("Login google =>",res.data);
+        roleBasedRedirect(res);
         })
       .catch(err => console.log(err));
-      history.push("/");
-
+     // history.push("/");
     } catch (error){
       toast.error(error.message);
       
